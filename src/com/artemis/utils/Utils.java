@@ -48,8 +48,9 @@ public class Utils {
 	}
 
 	public static float lerp(float a, float b, float t) {
-		if (t < 0)
+		if (t < 0) {
 			return a;
+		}
 		return a + t * (b - a);
 	}
 
@@ -129,14 +130,16 @@ public class Utils {
 	}
 
 	public static String readFileContents(String file) {
-		InputStream is = Utils.class.getClassLoader().getResourceAsStream(file);
+		InputStream is = null;
+		Reader reader = null;
 		String contents = "";
 		try {
+			is = Utils.class.getClassLoader().getResourceAsStream(file);
 			if (is != null) {
 				Writer writer = new StringWriter();
 
 				char[] buffer = new char[1024];
-				Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -148,7 +151,12 @@ public class Utils {
 			e.printStackTrace();
 		} finally {
 			try {
-				is.close();
+				if (reader != null) {
+					reader.close();
+				}
+				if (is != null) {
+					is.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

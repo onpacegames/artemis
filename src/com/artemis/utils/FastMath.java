@@ -23,8 +23,9 @@ public class FastMath {
 	}
 
 	public final static double sin(double x) {
-		x = _sin_a * x * Math.abs(x) + _sin_b * x;
-		return _sin_p * (x * Math.abs(x) - x) + x;
+		double _x = x;
+		_x = _sin_a * _x * Math.abs(_x) + _sin_b * _x;
+		return _sin_p * (_x * Math.abs(_x) - _x) + _x;
 	}
 
 	public final static double tan(final double x) {
@@ -44,9 +45,10 @@ public class FastMath {
 	}
 
 	public final static double inverseSqrt(double x) {
-		final double xhalves = 0.5d * x;
-		x = Double.longBitsToDouble(0x5FE6EB50C7B537AAl - (Double.doubleToRawLongBits(x) >> 1));
-		return x * (1.5d - xhalves * x * x); // more iterations possible
+		double _x = x;
+		final double xhalves = 0.5d * _x;
+		_x = Double.longBitsToDouble(0x5FE6EB50C7B537AAl - (Double.doubleToRawLongBits(_x) >> 1));
+		return _x * (1.5d - xhalves * _x * _x); // more iterations possible
 	}
 
 	public final static double sqrt(final double x) {
