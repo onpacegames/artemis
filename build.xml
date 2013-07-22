@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Artemis" default="build-deploy-jar">
+    <target name="build-deploy-jar" description="Builds and deploys a jar of Artemis">
+        <jar jarfile="dist/artemis.jar" basedir="bin/" includes="**/*.class" />
+    </target>
+    <target name="build-deploy-src-jar" description="Builds and deploys a jar of Artemis source">
+        <jar jarfile="dist/artemis-src.jar" basedir="bin/" excludes="**/*.class" />
+    </target>
+</project>
