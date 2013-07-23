@@ -1,7 +1,6 @@
 package com.artemis.utils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -17,15 +16,15 @@ public class Utils {
 		float a2 = v2 - v0;
 		float a3 = v1;
 
-		return (a0 * (t * t2)) + (a1 * t2) + (a2 * t) + a3;
+		return a0 * (t * t2) + a1 * t2 + a2 * t + a3;
 	}
 
 	public static float quadraticBezierInterpolation(float a, float b, float c, float t) {
-		return (((1f - t) * (1f - t)) * a) + (((2f * t) * (1f - t)) * b) + ((t * t) * c);
+		return (1f - t) * (1f - t) * a + 2f * t * (1f - t) * b + t * t * c;
 	}
 
 	public static float lengthOfQuadraticBezierCurve(float x0, float y0, float x1, float y1, float x2, float y2) {
-		if ((x0 == x1 && y0 == y1) || (x1 == x2 && y1 == y2)) {
+		if (x0 == x1 && y0 == y1 || x1 == x2 && y1 == y2) {
 			return distance(x0, y0, x2, y2);
 		}
 
@@ -62,7 +61,7 @@ public class Utils {
 		float dx = x2 - x1;
 		float dy = y2 - y1;
 		float d = radius1 + radius2;
-		return (dx * dx + dy * dy) < (d * d);
+		return dx * dx + dy * dy < d * d;
 	}
 
 	public static float euclideanDistanceSq2D(float x1, float y1, float x2, float y2) {
@@ -102,14 +101,14 @@ public class Utils {
 	public static float getRotatedX(float currentX, float currentY, float pivotX, float pivotY, float angleDegrees) {
 		float x = currentX - pivotX;
 		float y = currentY - pivotY;
-		float xr = (x * TrigLUT.cosDeg(angleDegrees)) - (y * TrigLUT.sinDeg(angleDegrees));
+		float xr = x * TrigLUT.cosDeg(angleDegrees) - y * TrigLUT.sinDeg(angleDegrees);
 		return xr + pivotX;
 	}
 
 	public static float getRotatedY(float currentX, float currentY, float pivotX, float pivotY, float angleDegrees) {
 		float x = currentX - pivotX;
 		float y = currentY - pivotY;
-		float yr = (x * TrigLUT.sinDeg(angleDegrees)) + (y * TrigLUT.cosDeg(angleDegrees));
+		float yr = x * TrigLUT.sinDeg(angleDegrees) + y * TrigLUT.cosDeg(angleDegrees);
 		return yr + pivotY;
 	}
 
@@ -130,16 +129,15 @@ public class Utils {
 	}
 
 	public static String readFileContents(String file) {
-		InputStream is = null;
-		Reader reader = null;
 		String contents = "";
-		try {
-			is = Utils.class.getClassLoader().getResourceAsStream(file);
+		try (
+			InputStream is = Utils.class.getClassLoader().getResourceAsStream(file);
+			Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))
+		) {
 			if (is != null) {
 				Writer writer = new StringWriter();
 
 				char[] buffer = new char[1024];
-				reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				int n;
 				while ((n = reader.read(buffer)) != -1) {
 					writer.write(buffer, 0, n);
@@ -149,17 +147,6 @@ public class Utils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if (reader != null) {
-					reader.close();
-				}
-				if (is != null) {
-					is.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		return contents;
