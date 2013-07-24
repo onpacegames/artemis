@@ -4,6 +4,9 @@
         <jar jarfile="dist/artemis.jar" basedir="bin/" includes="**/*.class" />
     </target>
     <target name="build-deploy-src-jar" description="Builds and deploys a jar of Artemis source">
-        <jar jarfile="dist/artemis-src.jar" basedir="bin/" excludes="**/*.class" />
+        <jar jarfile="dist/artemis-src.jar">
+            <fileset dir="bin/" />
+            <fileset dir="src/" />
+        </jar>
     </target>
 </project>
