@@ -30,6 +30,8 @@ import com.artemis.utils.ImmutableBag;
  * @author Arni Arent
  *
  */
+// TODO this doesn't work as intended, accumulated delta doesn't account for new entities...could be done better, maybe?
+@Deprecated
 public abstract class DelayedEntityProcessingSystem extends EntitySystem {
 	private float delay;
 	private boolean running;
@@ -84,7 +86,7 @@ public abstract class DelayedEntityProcessingSystem extends EntitySystem {
 
 
 	/**
-	 * Process a entity this system is interested in. Substract the accumulatedDelta
+	 * Process a entity this system is interested in. Subtract the accumulatedDelta
 	 * from the entities defined delay.
 	 *
 	 * @param e the entity to process.
