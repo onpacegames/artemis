@@ -1,6 +1,7 @@
 package com.artemis.utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -130,10 +131,13 @@ public class Utils {
 
 	public static String readFileContents(String file) {
 		String contents = "";
-		try (
-			InputStream is = Utils.class.getClassLoader().getResourceAsStream(file);
-			Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))
-		) {
+		InputStream is = null;
+		Reader reader = null;
+		try {
+			is = Utils.class.getClassLoader().getResourceAsStream(file);
+			
+			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			
 			if (is != null) {
 				Writer writer = new StringWriter();
 
@@ -147,9 +151,23 @@ public class Utils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return contents;
 	}
-
 }
